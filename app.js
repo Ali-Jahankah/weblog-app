@@ -7,6 +7,7 @@ const morgan = require("morgan");
 const expressLayout = require("express-ejs-layouts");
 
 const indexRoute = require("./routes/index");
+const dashRoutes = require("./routes/dashboard");
 const app = express();
 
 // Load Config
@@ -25,8 +26,10 @@ app.use(express.static(path.join(__dirname, "public")));
 if (process.env.NODE_ENV === "developement") {
   app.use(morgan("dev"));
 }
-// Routes
+// using layoutes
 app.use(expressLayout);
+// Routes
+app.use("/dashboard", dashRoutes);
 app.use(indexRoute);
 
 const PORT = process.env.PORT || 5000;
