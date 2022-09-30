@@ -5,7 +5,7 @@ const router = new Router();
 router.get("/", (req, res) => {
   res.render("index", {
     pageTitle: "Weblog App | MVC/EJS",
-    layout: "./layouts/loginTemp",
+    layout: "./layouts/mainTemp.ejs",
     path: "/",
   });
 });
