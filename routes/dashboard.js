@@ -10,12 +10,4 @@ router.get("/", (req, res) => {
   });
 });
 
-router.get("/login", (req, res) => {
-  res.render("login", {
-    pageTitle: "Login Page",
-    layout: "./layouts/dashTemp.ejs",
-    path: "/login",
-  });
-});
-
 module.exports = router;

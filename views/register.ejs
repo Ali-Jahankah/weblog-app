@@ -1,0 +1,53 @@
+<main class="form-signin w-100 m-auto">
+  <form action="/user/register" method="POST">
+    <h1 class="h3 mb-3 fw-normal">Register Page</h1>
+
+    <div class="form-floating">
+      <input
+        name="fullname"
+        type="text"
+        class="form-control"
+        id="fullname"
+        autocomplete="true"
+        placeholder="Fullname"
+      />
+      <label for="fullname" class="mt-2">Fullname</label>
+    </div>
+    <div class="form-floating">
+      <input
+        name="email"
+        type="email"
+        class="form-control"
+        id="email"
+        placeholder="Email Address"
+      />
+      <label for="email" class="mt-2">Email address</label>
+    </div>
+    <div class="form-floating">
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        placeholder="Password"
+      />
+      <label for="password" class="mt-2">Password</label>
+    </div>
+    <div class="form-floating">
+      <input
+        type="confirmPassword"
+        class="form-control"
+        id="confirmPassword"
+        name="confirmPassword"
+        placeholder="Re-type Password"
+      />
+      <label for="confirmPassword" class="mt-2">Re-type Password</label>
+    </div>
+
+    <div class="checkbox mb-3">
+      <label><a href="/users/login">Already registered? Login here!</a></label>
+    </div>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Register</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
+  </form>
+</main>

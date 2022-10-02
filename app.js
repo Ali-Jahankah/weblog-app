@@ -6,8 +6,6 @@ const dotEnv = require("dotenv");
 const morgan = require("morgan");
 const expressLayout = require("express-ejs-layouts");
 
-const indexRoute = require("./routes/index");
-const dashRoutes = require("./routes/dashboard");
 const app = express();
 
 // Load Config
@@ -22,15 +20,20 @@ app.set("views", "views");
 app.use(express.static(path.join(__dirname, "public")));
 // app.use(express.static(path.join(__dirname, process.env.BOOTSTRAP)));
 // app.use(express.static(path.join(__dirname, process.env.FONT_AWESOME)));
+
 //Log with Morgan in Dev Mode
+
 if (process.env.NODE_ENV === "developement") {
   app.use(morgan("dev"));
 }
 // using layoutes
 app.use(expressLayout);
+// Body parser
+app.use(express.urlencoded({ extended: false }));
 // Routes
-app.use("/dashboard", dashRoutes);
-app.use(indexRoute);
+app.use("/", require("./routes/index"));
+app.use("/dashboard", require("./routes/dashboard"));
+app.use("/user", require("./routes/user"));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
