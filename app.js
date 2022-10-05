@@ -34,7 +34,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/", require("./routes/index"));
 app.use("/dashboard", require("./routes/dashboard"));
 app.use("/user", require("./routes/user"));
-
+app.use(require("./routes/404"));
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`App is running on ${PORT} in ${process.env.NODE_ENV} Mode.`);
