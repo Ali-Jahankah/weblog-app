@@ -7,6 +7,7 @@ router.get("/register", (req, res) => {
     pageTitle: "Register Page",
     layout: "./layouts/mainTemp.ejs",
     path: "/register",
+    error: "",
   });
 });
 router.post("/register", async (req, res) => {
@@ -16,12 +17,29 @@ router.post("/register", async (req, res) => {
     password: Yup.string().required().min(8).max(16),
     confirmPassword: Yup.string()
       .required()
-      .oneOf([Yup.ref("password"), null]),
+      .oneOf(
+        [Yup.ref("password"), null],
+        "Re-type password is not matching with password"
+      ),
   });
-  const validete = await schema.validate(req.body);
-
-  console.log(validete);
-  res.send("req.body");
+  try {
+    const validate = await schema.validate(req.body);
+    if (!validate.errors) {
+      res.render("register", {
+        pageTitle: "Register Page",
+        layout: "./layouts/mainTemp.ejs",
+        path: "/register",
+        error: ["Register Done"],
+      });
+    }
+  } catch (error) {
+    res.render("register", {
+      pageTitle: "Register Page",
+      layout: "./layouts/mainTemp.ejs",
+      path: "/register",
+      error: error.errors,
+    });
+  }
 });
 router.get("/login", (req, res) => {
   res.render("login", {
