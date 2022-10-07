@@ -1,7 +1,13 @@
 <main class="form-signin w-100 m-auto">
-  <% if(error.length>0){ %>
-  <p><%= error.join(" ") %></p>
-  <% } %>
+  <% if(error.length>0){ %> <% error.forEach(item => { %>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <strong><%=item %> </strong>
+  </div>
+
+  <% }) %> <% } %>
   <form action="/user/register" method="POST">
     <h1 class="h3 mb-3 fw-normal">Register Page</h1>
 

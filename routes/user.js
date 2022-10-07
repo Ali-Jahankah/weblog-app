@@ -12,9 +12,11 @@ router.get("/register", (req, res) => {
 });
 router.post("/register", async (req, res) => {
   const schema = Yup.object().shape({
-    fullname: Yup.string().min(4).max(50).required(),
-    email: Yup.string().required().email(),
-    password: Yup.string().required().min(8).max(16),
+    fullname: Yup.string().min(4).max(50).required("Please type your fullname"),
+    email: Yup.string()
+      .required("Please write a valid email address")
+      .email("Please write a valid email address"),
+    password: Yup.string().required("Please choose a password").min(8).max(16),
     confirmPassword: Yup.string()
       .required()
       .oneOf(
@@ -25,14 +27,10 @@ router.post("/register", async (req, res) => {
   try {
     const validate = await schema.validate(req.body);
     if (!validate.errors) {
-      res.render("register", {
-        pageTitle: "Register Page",
-        layout: "./layouts/mainTemp.ejs",
-        path: "/register",
-        error: ["Register Done"],
-      });
+      res.redirect("/user/login");
     }
   } catch (error) {
+    console.log(error);
     res.render("register", {
       pageTitle: "Register Page",
       layout: "./layouts/mainTemp.ejs",
