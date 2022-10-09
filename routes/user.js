@@ -1,7 +1,42 @@
 const { Router } = require("express");
 const router = new Router();
-const Yup = require("yup");
-
+const Validate = require("fastest-validator");
+const v = new Validate();
+const schema = {
+  fullname: {
+    type: "string",
+    trim: true,
+    min: "4",
+    max: "50",
+    messages: {
+      stringMin: "Full name shoud be more than 4 characters!",
+    },
+  },
+  email: {
+    type: "email",
+    normalize: true,
+    min: "10",
+    messages: {
+      stringMin: "Email shoud be more than 10 characters!",
+    },
+  },
+  password: {
+    type: "string",
+    min: 6,
+    max: 16,
+    messages: {
+      stringMin: "Password must be between 6 to 16 characters!",
+    },
+  },
+  confirmPassword: {
+    type: "string",
+    min: 6,
+    max: 16,
+    messages: {
+      stringMin: "Re-type Password must be between 6 to 16 characters!",
+    },
+  },
+};
 router.get("/register", (req, res) => {
   res.render("register", {
     pageTitle: "Register Page",
@@ -10,32 +45,28 @@ router.get("/register", (req, res) => {
     error: "",
   });
 });
-router.post("/register", async (req, res) => {
-  const schema = Yup.object().shape({
-    fullname: Yup.string().min(4).max(50).required("Please type your fullname"),
-    email: Yup.string()
-      .required("Please write a valid email address")
-      .email("Please write a valid email address"),
-    password: Yup.string().required("Please choose a password").min(8).max(16),
-    confirmPassword: Yup.string()
-      .required()
-      .oneOf(
-        [Yup.ref("password"), null],
-        "Re-type password is not matching with password"
-      ),
-  });
-  try {
-    const validate = await schema.validate(req.body);
-    if (!validate.errors) {
-      res.redirect("/user/login");
+router.post("/register", (req, res) => {
+  const validate = v.validate(req.body, schema);
+  const errArr = [];
+  if (validate === true) {
+    const { password, confirmPassword } = req.body;
+    if (password !== confirmPassword) {
+      errArr.push("Re-type Password is not same as password!");
+      return res.render("register", {
+        pageTitle: "Register Page",
+        layout: "./layouts/mainTemp.ejs",
+        path: "/register",
+        error: errArr,
+      });
     }
-  } catch (error) {
-    console.log(error);
+    res.redirect("/user/login");
+  } else {
+    console.log(validate);
     res.render("register", {
       pageTitle: "Register Page",
       layout: "./layouts/mainTemp.ejs",
       path: "/register",
-      error: error.errors,
+      error: validate,
     });
   }
 });
