@@ -9,12 +9,36 @@ exports.register = (req, res) => {
   });
 };
 exports.createUser = async (req, res) => {
+  const errors = [];
   try {
     await User.userValidation(req.body);
+    const { fullname, email, password } = req.body;
+    const existUser = await User.findOne({ email });
+    if (existUser) {
+      errors.push({ message: "Email address is alredy registered!" });
+      return res.render("register", {
+        pageTitle: "Register Page",
+        layout: "./layouts/mainTemp.ejs",
+        path: "/register",
+        error: errors,
+      });
+    }
+    const newUser = new User({ fullname, email, password });
+    newUser
+      .save()
+      .then((u) => {
+        console.log(u);
+        res.redirect("/user/login");
+      })
+      .catch((errr) => {
+        if (errr) {
+          throw errr;
+        }
+      });
     res.redirect("/user/login");
   } catch (err) {
     console.log(err);
-    const errors = [];
+
     err.inner.forEach((e) =>
       errors.push({
         name: e.path,
