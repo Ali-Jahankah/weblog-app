@@ -1,5 +1,5 @@
 const User = require("../models/User");
-
+const bcrypt = require("bcryptjs");
 exports.register = (req, res) => {
   res.render("register", {
     pageTitle: "Register Page",
@@ -23,7 +23,8 @@ exports.createUser = async (req, res) => {
         error: errors,
       });
     }
-    const newUser = new User({ fullname, email, password });
+    const hash = await bcrypt.hash(password, 10);
+    const newUser = new User({ fullname, email, password: hash });
     newUser
       .save()
       .then((u) => {
