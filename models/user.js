@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter your password!"],
     minLength: 8,
-    maxLength: 40,
+    maxLength: 100,
   },
   createdAt: {
     type: Date,

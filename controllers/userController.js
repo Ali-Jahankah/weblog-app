@@ -36,6 +36,7 @@ exports.createUser = async (req, res) => {
           throw errr;
         }
       });
+    req.flash("sccss_msg", "You registered successfuly!");
     res.redirect("/user/login");
   } catch (err) {
     console.log(err);
@@ -59,5 +60,6 @@ exports.login = (req, res) => {
     pageTitle: "Login Page",
     layout: "./layouts/mainTemp.ejs",
     path: "/login",
+    message: req.flash("sccss_msg"),
   });
 };

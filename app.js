@@ -5,7 +5,8 @@ const express = require("express");
 const dotEnv = require("dotenv");
 const morgan = require("morgan");
 const expressLayout = require("express-ejs-layouts");
-
+const session = require("express-session");
+const flash = require("connect-flash");
 const app = express();
 
 // Load Config
@@ -35,6 +36,16 @@ app.use("/", require("./routes/index"));
 app.use("/dashboard", require("./routes/dashboard"));
 app.use("/user", require("./routes/user"));
 app.use(require("./routes/404"));
+//ession and flash message
+app.use(
+  session({
+    secret: "Secret",
+    cookie: { maxAge: 6000 },
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(flash());
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`App is running on ${PORT} in ${process.env.NODE_ENV} Mode.`);
