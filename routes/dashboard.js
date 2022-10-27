@@ -1,8 +1,9 @@
 const { Router } = require("express");
+const { auth } = require("../config/auth");
 const router = new Router();
 // Dashboard Routes
 
-router.get("/", (req, res) => {
+router.get("/", auth, (req, res) => {
   res.render("dashboard", {
     pageTitle: "Dashboard",
     layout: "./layouts/dashTemp.ejs",

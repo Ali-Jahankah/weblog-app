@@ -1,5 +1,7 @@
-const User = require("../models/User");
 const bcrypt = require("bcryptjs");
+const passport = require("passport");
+
+const User = require("../models/User");
 
 exports.register = (req, res) => {
   res.render("register", {
@@ -52,5 +54,13 @@ exports.login = (req, res) => {
     layout: "./layouts/mainTemp.ejs",
     path: "/login",
     message: req.flash("success_msg"),
+    error: req.flash("error"),
   });
+};
+exports.handleLogin = (req, res, next) => {
+  passport.authenticate("local", {
+    successRedirect: "/dashboard",
+    failureRedirect: "/user/login",
+    failureFlash: true,
+  })(req, res, next);
 };

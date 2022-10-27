@@ -5,6 +5,7 @@ const express = require("express");
 const dotEnv = require("dotenv");
 const morgan = require("morgan");
 const expressLayout = require("express-ejs-layouts");
+const passport = require("passport");
 const session = require("express-session");
 const flash = require("connect-flash");
 const app = express();
@@ -12,6 +13,9 @@ const app = express();
 // Load Config
 dotEnv.config({ path: "./config/config.env" });
 connectDB();
+// Passport config
+require("./config/passport");
+
 // View Engine
 app.set("view engine", "ejs");
 app.set("layout", "./layouts/mainTemp");
@@ -35,11 +39,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
     secret: "Secret",
-    cookie: { maxAge: 6000 },
+    cookie: { maxAge: 3600000 },
     resave: false,
     saveUninitialized: false,
   })
 );
+
+// Passport init
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(flash());
 // Routes
 app.use("/", require("./routes/index"));

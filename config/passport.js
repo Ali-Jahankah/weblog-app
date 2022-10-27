@@ -1,10 +1,11 @@
+const bcrypt = require("bcryptjs");
 const passport = require("passport");
+
 const { Strategy } = require("passport-local");
 // -----Another way to import rather than destructuring----
 // const MyStrategy=require('passport-local').Strategy;
 
 const User = require("../models/User");
-const bcrypt = require("bcrypt");
 
 passport.use(
   new Strategy({ usernameField: "email" }, async (email, password, done) => {
