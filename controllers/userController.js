@@ -64,3 +64,10 @@ exports.handleLogin = (req, res, next) => {
     failureFlash: true,
   })(req, res, next);
 };
+exports.logout = (req, res, next) => {
+  req.logout((err) => {
+    if (err) next(err);
+  });
+  req.flash("success_msg", "Loged out successfuly!");
+  res.redirect("/");
+};
