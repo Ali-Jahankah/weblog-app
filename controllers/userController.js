@@ -57,9 +57,17 @@ exports.login = (req, res) => {
     error: req.flash("error"),
   });
 };
+exports.handleRememberMe = (req, res) => {
+  if (req.body.remember) {
+    req.session.cookie.originalMaxAge = 24 * 60 * 60 * 1000;
+  } else {
+    req.session.cookie.expire = null;
+  }
+  res.redirect("/dashboard");
+};
 exports.handleLogin = (req, res, next) => {
   passport.authenticate("local", {
-    successRedirect: "/dashboard",
+    // successRedirect: "/dashboard",
     failureRedirect: "/user/login",
     failureFlash: true,
   })(req, res, next);

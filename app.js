@@ -2,11 +2,13 @@ const path = require("path");
 const connectDB = require("./config/db");
 
 const express = require("express");
+const mongoose = require("mongoose");
 const dotEnv = require("dotenv");
 const morgan = require("morgan");
 const expressLayout = require("express-ejs-layouts");
 const passport = require("passport");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const app = express();
 
@@ -39,9 +41,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
     secret: "Secret",
-    cookie: { maxAge: 3600000 },
+    cookie: { maxAge: null },
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
   })
 );
 
