@@ -1,8 +1,7 @@
 const path = require("path");
 const connectDB = require("./config/db");
-
+const winston = require("./config/winston");
 const express = require("express");
-const mongoose = require("mongoose");
 const dotEnv = require("dotenv");
 const morgan = require("morgan");
 const expressLayout = require("express-ejs-layouts");
@@ -10,11 +9,15 @@ const passport = require("passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
+const debug = require("debug")("weblog-debug");
+
 const app = express();
 
 // Load Config
 dotEnv.config({ path: "./config/config.env" });
 connectDB();
+// Using debugger
+debug("Database connected");
 // Passport config
 require("./config/passport");
 
@@ -31,7 +34,7 @@ app.use(express.static(path.join(__dirname, "public")));
 //Log with Morgan in Dev Mode
 
 if (process.env.NODE_ENV === "developement") {
-  app.use(morgan("dev"));
+  app.use(morgan("combined", { stream: winston.stream }));
 }
 // using layoutes
 app.use(expressLayout);
