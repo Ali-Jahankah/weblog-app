@@ -26,8 +26,8 @@ exports.createUser = async (req, res) => {
         error: errors,
       });
     }
-    const hash = await bcrypt.hash(password, 10);
-    const newUser = new User({ fullname, email, password: hash });
+    // const hash = await bcrypt.hash(password, 10);
+    const newUser = new User({ fullname, email, password });
     await newUser.save();
     req.flash("success_msg", "You registered successfuly!");
     res.redirect("/user/login");
@@ -44,6 +44,7 @@ exports.createUser = async (req, res) => {
       pageTitle: "Register Page",
       layout: "./layouts/mainTemp.ejs",
       path: "/register",
+      message: req.flash("success_msg"),
       error: errors,
     });
   }
