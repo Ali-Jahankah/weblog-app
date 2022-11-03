@@ -67,6 +67,10 @@ exports.handleRememberMe = (req, res) => {
   res.redirect("/dashboard");
 };
 exports.handleLogin = (req, res, next) => {
+  if (!req.body["g-recaptcha-response"]) {
+    req.flash("error", "Please do the Re-captcha first!");
+    return res.redirect("/user/login");
+  }
   passport.authenticate("local", {
     // successRedirect: "/dashboard",
     failureRedirect: "/user/login",
