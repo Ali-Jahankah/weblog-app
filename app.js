@@ -1,4 +1,6 @@
 const path = require("path");
+const bodyParser = require("body-parser");
+
 const connectDB = require("./config/db");
 const winston = require("./config/winston");
 const express = require("express");
@@ -39,7 +41,8 @@ if (process.env.NODE_ENV === "developement") {
 // using layoutes
 app.use(expressLayout);
 // Body parser
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 //ession and flash message
 app.use(
   session({
