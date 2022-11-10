@@ -7,4 +7,5 @@ const router = new Router();
 router.get("/", auth, adminController.loadDashboard);
 // new post form=================
 router.get("/new-post", auth, adminController.newPostForm);
+router.post("/create-post", auth, adminController.createPost);
 module.exports = router;
