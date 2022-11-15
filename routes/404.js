@@ -1,7 +1,5 @@
 const { Router } = require("express");
 const router = new Router();
-router.get("*", (req, res) => {
-  res.render("404", { pageTitle: "Not Found", path: "/404" });
-});
+router.get("*", require("../controllers/errorsController").get404);
 
 module.exports = router;

@@ -1,7 +1,9 @@
 const Post = require("../models/Post");
+const { get500 } = require("./errorsController");
 exports.loadDashboard = async (req, res) => {
   try {
     const posts = await Post.find({ user: req.user._id });
+
     res.render("privet/blogs", {
       pageTitle: "Dashboard",
       path: "/dashboard",
@@ -10,6 +12,7 @@ exports.loadDashboard = async (req, res) => {
       posts,
     });
   } catch (error) {
+    get500(req, res);
     console.log(error);
   }
 };
@@ -28,5 +31,6 @@ exports.createPost = async (req, res) => {
     res.redirect("/dashboard");
   } catch (error) {
     console.log(error);
+    get500(req, res);
   }
 };

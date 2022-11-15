@@ -46,7 +46,7 @@ app.use(bodyParser.json());
 //ession and flash message
 app.use(
   session({
-    secret: "Secret",
+    secret: process.env.SESSION_SECRET,
     cookie: { maxAge: null },
     resave: false,
     saveUninitialized: false,

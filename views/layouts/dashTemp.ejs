@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="/css/bootstrap.css" />
     <link rel="stylesheet" href="/css/font-awesome.css" />
     <link href="/css/dashboard.css" rel="stylesheet" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.20.0/ckeditor.js"
+      integrity="sha512-BcYkQlDTKkWL0Unn6RhsIyd2TMm3CcaPf0Aw1vsV28Dj4tpodobCPiriytfnnndBmiqnbpi2EelwYHHATr04Kg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
   </head>
   <body>
     <header
@@ -45,7 +51,9 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4"><%- body %></main>
       </div>
     </div>
-
+    <script>
+      CKEDITOR.replace("body");
+    </script>
     <script src="/js/bootstrap.bundle.min.js"></script>
     <script src="/js/jquery.slim.min.js"></script>
   </body>
