@@ -90,9 +90,10 @@ exports.handleLogin = async (req, res, next) => {
   }
 };
 exports.logout = (req, res, next) => {
+  req.session = null;
   req.logout((err) => {
     if (err) next(err);
   });
-  req.flash("success_msg", "Loged out successfuly!");
+  // req.flash("success_msg", "Loged out successfuly!");
   res.redirect("/");
 };

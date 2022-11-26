@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+const { schema } = require("./secure/postValidation");
 const postSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -27,5 +28,7 @@ const postSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-
+postSchema.statics.postValidation = function (body) {
+  return schema.validate(body, { abortEarly: false });
+};
 module.exports = mongoose.model("Post", postSchema);
