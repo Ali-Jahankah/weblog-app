@@ -1,5 +1,8 @@
 const Post = require("../models/Post");
+const multer = require("multer");
+const uuid = require("uuid").v4;
 const { get500 } = require("./errorsController");
+
 exports.loadDashboard = async (req, res) => {
   try {
     const posts = await Post.find({ user: req.user._id });
@@ -34,18 +37,41 @@ exports.createPost = async (req, res) => {
     res.redirect("/dashboard");
   } catch (err) {
     console.log(err);
-    err.inner.forEach((e) =>
+    err.inner.forEach((e) => {
       errors.push({
         name: e.path,
         message: e.message,
-      })
-    );
-    return res.render("privet/newPostForm", {
-      pageTitle: "New Post",
+      });
+    });
+    res.render("newPostForm", {
+      pageTitle: "New Post Form",
       path: "/dashboard/new-post",
-      layout: "./layouts/dashTemp.ejs",
+      layouts: "/layouts/deshTemp.ejs",
       fullname: req.user.fullname,
       error: errors,
     });
   }
+};
+exports.uploadIMage = (req, res) => {
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "/public/uploads");
+    },
+    filename: (req, file, cb) => {
+      cb(null, `${uuid()}_${file.originalname}`);
+    },
+  });
+  const fileFIlter = (req, file, cb) => {
+    if (file.mimetype === "image/jpeg") {
+      cb(null, true);
+    } else {
+      cb("Please only choose a jpeg file!", false);
+    }
+  };
+  multer({
+    limits: { fileSize: 4000000 },
+    dest: "/uploads",
+    fileFilter: fileFIlter,
+    storage: storage,
+  }).single("image");
 };
