@@ -63,10 +63,10 @@ exports.uploadImage = (req, res) => {
     if (err) {
       res.send(err);
     } else {
-      if (req.file) {
-        res.status(200).send("آپلود عکس موفقیت آمیز بود");
+      if (req.file && req.file.mimetype === "image/jpeg") {
+        res.status(200).send("Image Uploaded!");
       } else {
-        res.send("جهت آپلود باید عکسی انتخاب کنید");
+        res.send("Please choose an image first!");
       }
     }
   });
