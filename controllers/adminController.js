@@ -1,6 +1,6 @@
 const Post = require("../models/Post");
 const multer = require("multer");
-const uuid = require("uuid").v4;
+const { storage, fileFilter } = require("../utils/multer");
 const { get500 } = require("./errorsController");
 
 exports.loadDashboard = async (req, res) => {
@@ -52,26 +52,22 @@ exports.createPost = async (req, res) => {
     });
   }
 };
-exports.uploadIMage = (req, res) => {
-  const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, "/public/uploads");
-    },
-    filename: (req, file, cb) => {
-      cb(null, `${uuid()}_${file.originalname}`);
-    },
-  });
-  const fileFIlter = (req, file, cb) => {
-    if (file.mimetype === "image/jpeg") {
-      cb(null, true);
-    } else {
-      cb("Please only choose a jpeg file!", false);
-    }
-  };
-  multer({
+exports.uploadImage = (req, res) => {
+  const upload = multer({
     limits: { fileSize: 4000000 },
     dest: "/uploads",
-    fileFilter: fileFIlter,
+    fileFilter: fileFilter,
     storage: storage,
   }).single("image");
+  upload(req, res, (err) => {
+    if (err) {
+      res.send(err);
+    } else {
+      if (req.file) {
+        res.status(200).send("آپلود عکس موفقیت آمیز بود");
+      } else {
+        res.send("جهت آپلود باید عکسی انتخاب کنید");
+      }
+    }
+  });
 };

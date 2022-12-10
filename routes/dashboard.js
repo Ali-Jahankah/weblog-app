@@ -8,5 +8,5 @@ router.get("/", auth, adminController.loadDashboard);
 // new post form=================
 router.get("/new-post", auth, adminController.newPostForm);
 router.post("/create-post", auth, adminController.createPost);
-// router.post("/upload-image",auth,adminController.)
+router.post("/upload-image", auth, adminController.uploadImage);
 module.exports = router;

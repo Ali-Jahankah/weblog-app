@@ -1,15 +1,17 @@
+console.log(document.getElementById("imageUpload"));
 document.getElementById("imageUpload").onclick = function () {
   const xhttp = new XMLHttpRequest();
+  const selectedImage = document.getElementById("selectedImage");
+  const imageStatus = document.getElementById("imageStatus");
   xhttp.onreadystatechange = function () {
-    if (this.status === 200) {
-      document.getElementById("imageStatus").innerHTML = this.responseText;
-    } else {
-      document.getElementById("imageStatus").innerHTML =
-        "An error from the server!";
-    }
+    imageStatus.innerHTML = this.responseText;
   };
   xhttp.open("POST", "/dashboard/upload-image");
   const formData = new FormData();
-  formData.append("image", document.getElementById("selectedImage").files[0]);
-  xhttp.send(formData);
+  if (selectedImage.files.length > 0) {
+    formData.append("image", selectedImage.files[0]);
+    xhttp.send(formData);
+  } else {
+    imageStatus.innerHTML = "Please choose an image first!";
+  }
 };
