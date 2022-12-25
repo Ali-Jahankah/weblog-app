@@ -70,7 +70,7 @@ exports.uploadImage = (req, res) => {
         await sharp(req.file.buffer)
           .jpeg({ quality: 60 })
           .toFile(`./public/uploads/${fileName}`);
-        res.status(200).send("Image Uploaded!");
+        res.status(200).send(`http://localhost:3000/uploads/${fileName}`);
       } else {
         res.send("Please choose an image first!");
       }

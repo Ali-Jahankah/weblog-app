@@ -4,7 +4,11 @@ document.getElementById("imageUpload").onclick = function () {
   const imageStatus = document.getElementById("imageStatus");
   const progressBarDiv = document.getElementById("progressDiv");
   const progressBar = document.getElementById("progressBar");
+  const imageLink = document.getElementById("imageLink");
   xhttp.onreadystatechange = function () {
+    if (xhttp.status === 200) {
+      imageLink.innerHTML = this.responseText;
+    }
     imageStatus.innerHTML = this.responseText;
   };
   xhttp.upload.onprogress = function (e) {
