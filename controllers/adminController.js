@@ -1,6 +1,8 @@
 const Post = require("../models/Post");
 const multer = require("multer");
-const { storage, fileFilter } = require("../utils/multer");
+const sharp = require("sharp");
+const shortId = require("shortid");
+const { fileFilter } = require("../utils/multer");
 const { get500 } = require("./errorsController");
 
 exports.loadDashboard = async (req, res) => {
@@ -55,15 +57,19 @@ exports.createPost = async (req, res) => {
 exports.uploadImage = (req, res) => {
   const upload = multer({
     limits: { fileSize: 4000000 },
-    dest: "/uploads",
+    // dest: "/uploads",
     fileFilter: fileFilter,
-    storage: storage,
+    // storage: storage,
   }).single("image");
-  upload(req, res, (err) => {
+  upload(req, res, async (err) => {
     if (err) {
-      res.send(err);
+      return res.status(400).send(err);
     } else {
       if (req.file && req.file.mimetype === "image/jpeg") {
+        const fileName = `${shortId.generate()}_${req.file.originalname}`;
+        await sharp(req.file.buffer)
+          .jpeg({ quality: 60 })
+          .toFile(`./public/uploads/${fileName}`);
         res.status(200).send("Image Uploaded!");
       } else {
         res.send("Please choose an image first!");
