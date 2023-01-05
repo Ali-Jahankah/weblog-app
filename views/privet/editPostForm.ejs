@@ -1,7 +1,7 @@
 <h3 class="mt-2 text-center">Edit Post</h3>
 <div class="w-50 mx-auto"><%- include("../includes/errorMessages.ejs") %></div>
 <div class="d-flex align-items-center justify-content-center">
-  <form action="/dashboard/edit-post" class="w-50" method="POST">
+  <form action="/dashboard/edit-post/<%= post._id %>" class="w-50" method="POST">
     <div class="form-group">
       <label for="title">Title</label>
       <input
@@ -16,8 +16,8 @@
     <div class="form-group mt-4">
       <label for="status">Status</label>
       <select name="status" class="form-control w-25" id="status">
-        <option value="<%= post.status  %> " selected><%= post.status%></option>
-        <option value="<% post.status==="privet"?"public":"privet" %> "><%= post.status==="public"?"privet":"public"  %> </option>
+        <option value="<%= post.status  %>" selected><%= post.status%></option>
+        <option value="<%= post.status==="privet"?"public":"privet" %>"><%= post.status==="public"?"privet":"public" %></option>
       </select>
     </div>
     <div class="input-group mb-3">
@@ -52,8 +52,7 @@
     <div class="form-group mt-4">
       <h5>Text Here...</h5>
       <textarea name="body" class="form-control" id="body">
-<%= post.body  %> </textarea
-      >
+<%= post.body  %></textarea>
     </div>
 
     <div class="row mt-4">

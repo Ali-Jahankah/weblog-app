@@ -31,23 +31,26 @@ exports.newPostForm = (req, res) => {
   });
 };
 exports.editPostForm = async (req, res) => {
-  const post = await Post.findOne({
-    _id: req.params.id,
-  }).catch((er) => res.redirect("/errors/404"));
-
-  if (post && post.user.toString() == req.user._id) {
-    res.render("privet/editPostForm", {
-      pageTitle: "Edit Post",
-      path: "/dashboard/edit-post",
-      layout: "./layouts/dashTemp.ejs",
-      fullname: req.user.fullname,
-      error: [],
-      post,
+  try {
+    const post = await Post.findOne({
+      _id: req.params.id,
     });
-  }
-  if (post.user.toString() != req.user._id) {
-    return res.redirect("/dashboard");
-  } else {
+    if (post && post.user.toString() == req.user._id) {
+      return res.render("privet/editPostForm", {
+        pageTitle: "Edit Post",
+        path: "/dashboard/edit-post",
+        layout: "./layouts/dashTemp.ejs",
+        fullname: req.user.fullname,
+        error: [],
+        post,
+      });
+    }
+    if (post.user.toString() != req.user._id) {
+      return res.redirect("/dashboard");
+    } else {
+      return res.redirect("errors/404");
+    }
+  } catch (er) {
     return res.redirect("errors/404");
   }
 };
@@ -57,7 +60,7 @@ exports.createPost = async (req, res) => {
     await Post.postValidation(req.body);
     const newPost = { ...req.body, user: req.user._id };
     await Post.create(newPost);
-    res.redirect("/dashboard");
+    return res.redirect("/dashboard");
   } catch (err) {
     console.log(err);
     err.inner.forEach((e) => {
@@ -76,6 +79,7 @@ exports.createPost = async (req, res) => {
   }
 };
 exports.editPost = async (req, res) => {
+  console.log(req.body);
   const errors = [];
   const post = await Post.findOne({
     _id: req.params.id,
@@ -85,7 +89,7 @@ exports.editPost = async (req, res) => {
     if (!post) {
       res.redirect("errors/404");
     }
-    if (post.user.toString() !== req.user._id) {
+    if (post.user.toString() != req.user._id) {
       res.redirect("/dashboard");
     }
     const { body, title, status } = req.body;
@@ -103,9 +107,9 @@ exports.editPost = async (req, res) => {
         message: e.message,
       });
     });
-    res.render("newPostForm", {
-      pageTitle: "New Post Form",
-      path: "/dashboard/new-post",
+    res.render("privet/editPostForm", {
+      pageTitle: "Edit Post Form",
+      path: "/dashboard/edit-post",
       layouts: "/layouts/deshTemp.ejs",
       fullname: req.user.fullname,
       error: errors,
