@@ -140,3 +140,18 @@ exports.uploadImage = (req, res) => {
     }
   });
 };
+exports.deletePost = async (req, res) => {
+  try {
+    const post = await Post.findOne({ _id: req.params.id });
+    if (req.user._id == post.user.toString() && post) {
+      await Post.findByIdAndRemove(req.params.id);
+      return res.redirect("/dashboard");
+    } else {
+      return res.redirect("/errors/500");
+    }
+  } catch (error) {
+    console.log(error);
+
+    res.redirect("errors/404");
+  }
+};

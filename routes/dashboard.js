@@ -12,5 +12,7 @@ router.post("/upload-image", auth, adminController.uploadImage);
 // Edit post form=================
 router.get("/edit-post/:id", auth, adminController.editPostForm);
 router.post("/edit-post/:id", auth, adminController.editPost);
+//Delete post
+router.get("/delete-post/:id", auth, adminController.deletePost);
 
 module.exports = router;
