@@ -30,6 +30,27 @@ exports.newPostForm = (req, res) => {
     error: [],
   });
 };
+exports.editPostForm = async (req, res) => {
+  const post = await Post.findOne({
+    _id: req.params.id,
+  }).catch((er) => res.redirect("/errors/404"));
+
+  if (post && post.user.toString() == req.user._id) {
+    res.render("privet/editPostForm", {
+      pageTitle: "Edit Post",
+      path: "/dashboard/edit-post",
+      layout: "./layouts/dashTemp.ejs",
+      fullname: req.user.fullname,
+      error: [],
+      post,
+    });
+  }
+  if (post.user.toString() != req.user._id) {
+    return res.redirect("/dashboard");
+  } else {
+    return res.redirect("errors/404");
+  }
+};
 exports.createPost = async (req, res) => {
   const errors = [];
   try {
@@ -51,6 +72,44 @@ exports.createPost = async (req, res) => {
       layouts: "/layouts/deshTemp.ejs",
       fullname: req.user.fullname,
       error: errors,
+    });
+  }
+};
+exports.editPost = async (req, res) => {
+  const errors = [];
+  const post = await Post.findOne({
+    _id: req.params.id,
+  });
+  try {
+    await Post.postValidation(req.body);
+    if (!post) {
+      res.redirect("errors/404");
+    }
+    if (post.user.toString() !== req.user._id) {
+      res.redirect("/dashboard");
+    }
+    const { body, title, status } = req.body;
+    post.body = body;
+    post.status = status;
+    post.title = title;
+    await post.save();
+
+    return res.redirect("/dashboard");
+  } catch (err) {
+    console.log(err);
+    err.inner.forEach((e) => {
+      errors.push({
+        name: e.path,
+        message: e.message,
+      });
+    });
+    res.render("newPostForm", {
+      pageTitle: "New Post Form",
+      path: "/dashboard/new-post",
+      layouts: "/layouts/deshTemp.ejs",
+      fullname: req.user.fullname,
+      error: errors,
+      post,
     });
   }
 };

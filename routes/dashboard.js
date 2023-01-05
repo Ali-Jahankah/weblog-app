@@ -9,4 +9,8 @@ router.get("/", auth, adminController.loadDashboard);
 router.get("/new-post", auth, adminController.newPostForm);
 router.post("/create-post", auth, adminController.createPost);
 router.post("/upload-image", auth, adminController.uploadImage);
+// Edit post form=================
+router.get("/edit-post/:id", auth, adminController.editPostForm);
+router.post("/edit-post/:id", auth, adminController.editPost);
+
 module.exports = router;

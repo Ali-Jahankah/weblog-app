@@ -8,6 +8,7 @@ document.getElementById("imageUpload").onclick = function () {
   xhttp.onreadystatechange = function () {
     if (xhttp.status === 200) {
       imageLink.innerHTML = this.responseText;
+      selectedImage.value = "";
     }
     imageStatus.innerHTML = this.responseText;
   };
