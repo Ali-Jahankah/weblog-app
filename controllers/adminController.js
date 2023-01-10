@@ -7,7 +7,25 @@ const { get500 } = require("./errorsController");
 
 exports.loadDashboard = async (req, res) => {
   try {
-    const posts = await Post.find({ user: req.user._id });
+    if(req.query.page<1){
+      req.query.page=1;
+    }
+    const page = +req.query.page || 1;
+    const numberOfPosts = await Post.find({ user: req.user._id }).countDocuments();
+    const pagination = {
+      per_page: 2,
+      current_page: page,
+      next_page: page + 1,
+      previous_page: page - 1,
+      has_previous_page: page > 1,
+      has_next_page:function(){return page * this.per_page < numberOfPosts},
+      last_page: Math.ceil(numberOfPosts / this.per_page),
+      x:()=>this.per_page
+      } 
+
+    const posts = await Post.find({ user: req.user._id }).skip(pagination.per_page*(page-1)).limit(pagination.per_page);
+
+console.log(pagination.has_next_page())
 
     res.render("privet/blogs", {
       pageTitle: "Dashboard",
@@ -15,6 +33,8 @@ exports.loadDashboard = async (req, res) => {
       layout: "./layouts/dashTemp.ejs",
       fullname: req.user.fullname,
       posts,
+      pagination,
+      numberOfPosts,
     });
   } catch (error) {
     get500(req, res);

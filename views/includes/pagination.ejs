@@ -1,0 +1,21 @@
+<nav>
+    <ul class="pagination">
+     
+      
+        <% if(pagination.has_previous_page ){ %>
+          
+          <li class="page-item"><a class="page-link" href="?page=<%= pagination.previous_page %> "><%= pagination.previous_page%></a></li>
+          <% } %>  
+     
+     
+      <li class="page-item active">
+        <a class="page-link" href="?page=<%= pagination.current_page  %> "><%= pagination.current_page%> <span class="sr-only">(current)</span></a>
+      </li>
+      <% if(pagination.has_next_page() ){ %> 
+      
+        <li class="page-item"><a class="page-link" href="?page=<%= pagination.next_page  %> "><%= pagination.next_page  %> </a></li>
+        <% } %>  
+      
+     
+    </ul>
+  </nav>
